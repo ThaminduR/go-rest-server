@@ -1,0 +1,84 @@
+{
+  "server": {
+    "port": "8080"
+  },
+  "endpoints": [
+    {
+      "path": "/health",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "Service is healthy",
+          "status": "ok"
+        }
+      }
+    },
+    {
+      "path": "/api/products",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "products": [
+            {
+              "id": 1,
+              "name": "Laptop",
+              "price": 999.99,
+              "inStock": true
+            },
+            {
+              "id": 2,
+              "name": "Mouse",
+              "price": 29.99,
+              "inStock": true
+            },
+            {
+              "id": 3,
+              "name": "Keyboard",
+              "price": 79.99,
+              "inStock": false
+            }
+          ],
+          "total": 3
+        }
+      }
+    },
+    {
+      "path": "/api/weather",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "location": "San Francisco",
+          "temperature": 72,
+          "conditions": "Sunny",
+          "humidity": 65,
+          "wind_speed": 10
+        }
+      }
+    },
+    {
+      "path": "/unauthorized",
+      "method": "GET",
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "Unauthorized access",
+          "message": "Please provide valid credentials"
+        }
+      }
+    },
+    {
+      "path": "/forbidden",
+      "method": "GET",
+      "response": {
+        "status": 403,
+        "body": {
+          "error": "Forbidden",
+          "message": "You don't have permission to access this resource"
+        }
+      }
+    }
+  ]
+}

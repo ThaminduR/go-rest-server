@@ -1,0 +1,85 @@
+{
+  "server": {
+    "port": "8080"
+  },
+  "endpoints": [
+    {
+      "path": "/health",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "Service is healthy",
+          "status": "ok"
+        }
+      }
+    },
+    {
+      "path": "/hello",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "Hello from configurable Go REST API!",
+          "status": "success"
+        }
+      }
+    },
+    {
+      "path": "/data",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "items": ["item1", "item2", "item3"],
+          "count": 3,
+          "description": "Sample data from configuration"
+        }
+      }
+    },
+    {
+      "path": "/users",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "users": [
+            {
+              "id": 1,
+              "name": "John Doe",
+              "email": "john@example.com"
+            },
+            {
+              "id": 2,
+              "name": "Jane Smith",
+              "email": "jane@example.com"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "/api/status",
+      "method": "GET",
+      "response": {
+        "status": 200,
+        "body": {
+          "api_version": "1.0.0",
+          "environment": "development",
+          "uptime": "configured endpoint"
+        }
+      }
+    },
+    {
+      "path": "/error",
+      "method": "GET",
+      "response": {
+        "status": 500,
+        "body": {
+          "error": "This is a simulated error",
+          "code": "DEMO_ERROR"
+        }
+      }
+    }
+  ]
+}
