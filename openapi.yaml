@@ -1,0 +1,220 @@
+openapi: 3.0.3
+info:
+  title: Go REST Server API
+  description: |
+    A simple, configurable REST API server written in Go with Docker support.
+    Perfect for mocking APIs, testing, and development.
+    
+    All endpoints are configurable via `config.json`.
+  version: 1.0.0
+  contact:
+    name: API Support
+    url: https://github.com/ThaminduR/go-rest-server
+  license:
+    name: Open Source
+    url: https://github.com/ThaminduR/go-rest-server
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: http://localhost:3000
+    description: Alternative local server
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Sample Data
+    description: Sample data endpoints for testing
+  - name: Error Simulation
+    description: Endpoints for testing error handling
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check endpoint
+      description: Returns the health status of the service
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Service is healthy"
+                  status:
+                    type: string
+                    example: "ok"
+
+  /hello:
+    get:
+      tags:
+        - Sample Data
+      summary: Hello world endpoint
+      description: Returns a simple hello message
+      operationId: getHello
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello from configurable Go REST API!"
+                  status:
+                    type: string
+                    example: "success"
+
+  /data:
+    get:
+      tags:
+        - Sample Data
+      summary: Sample data endpoint
+      description: Returns sample data array
+      operationId: getData
+      responses:
+        '200':
+          description: Successful response with sample data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: string
+                    example: ["item1", "item2", "item3"]
+                  count:
+                    type: integer
+                    example: 3
+                  description:
+                    type: string
+                    example: "Sample data from configuration"
+
+  /users:
+    get:
+      tags:
+        - Sample Data
+      summary: Get user list
+      description: Returns a list of sample users
+      operationId: getUsers
+      responses:
+        '200':
+          description: Successful response with user list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: "John Doe"
+                        email:
+                          type: string
+                          format: email
+                          example: "john@example.com"
+
+  /api/status:
+    get:
+      tags:
+        - Health
+      summary: API status information
+      description: Returns API version and status information
+      operationId: getApiStatus
+      responses:
+        '200':
+          description: Successful response with API status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  api_version:
+                    type: string
+                    example: "1.0.0"
+                  environment:
+                    type: string
+                    example: "development"
+                  uptime:
+                    type: string
+                    example: "configured endpoint"
+
+  /error:
+    get:
+      tags:
+        - Error Simulation
+      summary: Simulated error endpoint
+      description: Returns a 500 error for testing error handling
+      operationId: getError
+      responses:
+        '500':
+          description: Internal server error (simulated)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "This is a simulated error"
+                  code:
+                    type: string
+                    example: "DEMO_ERROR"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Not Found"
+      required:
+        - error
+
+    MethodNotAllowed:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message for method not allowed
+          example: "Method not allowed"
+      required:
+        - error
+
+  responses:
+    NotFound:
+      description: The requested resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Not Found"
+
+    MethodNotAllowed:
+      description: The HTTP method is not allowed for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MethodNotAllowed'
+          example:
+            error: "Method not allowed"

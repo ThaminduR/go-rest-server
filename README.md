@@ -286,6 +286,7 @@ The config file is mounted as a volume, so changes are reflected instantly after
 
 - **`config.json`** - Default endpoint configuration (6 endpoints)
 - **`config.example.json`** - Example with more advanced configurations
+- **`openapi.yaml`** - OpenAPI 3.0 specification defining all endpoints
 - **`QUICKSTART.md`** - Quick reference guide
 
 **Note:** Responses contain only the data defined in `config.json` - no automatic fields are added.
@@ -298,6 +299,7 @@ The config file is mounted as a volume, so changes are reflected instantly after
 ├── go.mod                  # Go module dependencies
 ├── config.json             # Default endpoint configuration ⚙️
 ├── config.example.json     # Example configurations
+├── openapi.yaml            # OpenAPI 3.0 specification 📋
 ├── Dockerfile              # Docker image definition 🐳
 ├── docker-compose.yml      # Docker Compose setup 🐳
 ├── .dockerignore           # Docker build exclusions
@@ -356,7 +358,32 @@ Test error handling in your applications:
 - **Permission denied**: Try `sudo docker-compose up` (Linux)
 - **Port conflict**: Change port in docker-compose.yml or use `-p 9000:8080`
 
-## 📝 Examples
+## � API Documentation
+
+### OpenAPI Specification
+
+The API is fully documented using OpenAPI 3.0 specification in `openapi.yaml`.
+
+**View the API documentation:**
+- Copy `openapi.yaml` to [Swagger Editor](https://editor.swagger.io/)
+- Or use any OpenAPI viewer/tool
+
+**Key features documented:**
+- All endpoint paths and methods
+- Request/response schemas
+- Status codes
+- Example responses
+- Error responses
+
+### Interactive API Testing
+
+You can use tools like:
+- **Swagger UI** - Visual documentation and testing
+- **Postman** - Import the OpenAPI spec for testing
+- **Insomnia** - REST client with OpenAPI support
+- **curl** - Command-line testing (examples in README)
+
+## �📝 Configuration Examples
 
 See `config.example.json` for more configuration examples including:
 - Product catalog endpoints
