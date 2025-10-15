@@ -23,19 +23,17 @@ servers:
 tags:
   - name: Health
     description: Health check endpoints
-  - name: Sample Data
-    description: Sample data endpoints for testing
-  - name: Error Simulation
-    description: Endpoints for testing error handling
+  - name: Services
+    description: Service endpoints for testing
 
 paths:
-  /health:
+  /healthcheck:
     get:
       tags:
         - Health
       summary: Health check endpoint
       description: Returns the health status of the service
-      operationId: getHealth
+      operationId: getHealthcheck
       responses:
         '200':
           description: Service is healthy
@@ -44,20 +42,47 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
-                    type: string
-                    example: "Service is healthy"
                   status:
                     type: string
-                    example: "ok"
+                    example: "healthy"
+                  service:
+                    type: string
+                    example: "go-rest-server"
+    post:
+      tags:
+        - Health
+      summary: Health check endpoint (POST)
+      description: Returns the health status of the service (accepts POST requests)
+      operationId: postHealthcheck
+      requestBody:
+        description: Optional request body (ignored by server)
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  service:
+                    type: string
+                    example: "go-rest-server"
 
-  /hello:
+  /servicea:
     get:
       tags:
-        - Sample Data
-      summary: Hello world endpoint
-      description: Returns a simple hello message
-      operationId: getHello
+        - Services
+      summary: Service A endpoint
+      description: Returns Service A status and information
+      operationId: getServiceA
       responses:
         '200':
           description: Successful response
@@ -66,117 +91,155 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  service:
                     type: string
-                    example: "Hello from configurable Go REST API!"
+                    example: "servicea"
                   status:
                     type: string
-                    example: "success"
-
-  /data:
-    get:
-      tags:
-        - Sample Data
-      summary: Sample data endpoint
-      description: Returns sample data array
-      operationId: getData
-      responses:
-        '200':
-          description: Successful response with sample data
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: string
-                    example: ["item1", "item2", "item3"]
-                  count:
-                    type: integer
-                    example: 3
-                  description:
-                    type: string
-                    example: "Sample data from configuration"
-
-  /users:
-    get:
-      tags:
-        - Sample Data
-      summary: Get user list
-      description: Returns a list of sample users
-      operationId: getUsers
-      responses:
-        '200':
-          description: Successful response with user list
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  users:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 1
-                        name:
-                          type: string
-                          example: "John Doe"
-                        email:
-                          type: string
-                          format: email
-                          example: "john@example.com"
-
-  /api/status:
-    get:
-      tags:
-        - Health
-      summary: API status information
-      description: Returns API version and status information
-      operationId: getApiStatus
-      responses:
-        '200':
-          description: Successful response with API status
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  api_version:
+                    example: "running"
+                  version:
                     type: string
                     example: "1.0.0"
-                  environment:
-                    type: string
-                    example: "development"
-                  uptime:
-                    type: string
-                    example: "configured endpoint"
-
-  /error:
-    get:
+    post:
       tags:
-        - Error Simulation
-      summary: Simulated error endpoint
-      description: Returns a 500 error for testing error handling
-      operationId: getError
+        - Services
+      summary: Service A endpoint (POST)
+      description: Returns Service A status and information (accepts POST requests)
+      operationId: postServiceA
+      requestBody:
+        description: Optional request body (ignored by server)
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
       responses:
-        '500':
-          description: Internal server error (simulated)
+        '200':
+          description: Successful response
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
+                  service:
                     type: string
-                    example: "This is a simulated error"
-                  code:
+                    example: "servicea"
+                  status:
                     type: string
-                    example: "DEMO_ERROR"
+                    example: "running"
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+  /serviceb:
+    get:
+      tags:
+        - Services
+      summary: Service B endpoint
+      description: Returns Service B status and information
+      operationId: getServiceB
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    type: string
+                    example: "serviceb"
+                  status:
+                    type: string
+                    example: "running"
+                  version:
+                    type: string
+                    example: "1.0.0"
+    post:
+      tags:
+        - Services
+      summary: Service B endpoint (POST)
+      description: Returns Service B status and information (accepts POST requests)
+      operationId: postServiceB
+      requestBody:
+        description: Optional request body (ignored by server)
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    type: string
+                    example: "serviceb"
+                  status:
+                    type: string
+                    example: "running"
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+  /servicec:
+    get:
+      tags:
+        - Services
+      summary: Service C endpoint
+      description: Returns Service C status and information
+      operationId: getServiceC
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    type: string
+                    example: "servicec"
+                  status:
+                    type: string
+                    example: "running"
+                  version:
+                    type: string
+                    example: "1.0.0"
+    post:
+      tags:
+        - Services
+      summary: Service C endpoint (POST)
+      description: Returns Service C status and information (accepts POST requests)
+      operationId: postServiceC
+      requestBody:
+        description: Optional request body (ignored by server)
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    type: string
+                    example: "servicec"
+                  status:
+                    type: string
+                    example: "running"
+                  version:
+                    type: string
+                    example: "1.0.0"
 
 components:
   schemas:

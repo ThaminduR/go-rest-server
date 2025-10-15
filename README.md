@@ -70,31 +70,41 @@ CONFIG_FILE=config.example.json go run main.go
 
 ## 🧪 Test the Server
 
-Once running, test the endpoints:
+Once running, test the endpoints (all support GET and POST):
 
 ```bash
-# Health check
-curl http://localhost:8080/health
+# Health check - GET
+curl http://localhost:8080/healthcheck
 
-# Hello endpoint
-curl http://localhost:8080/hello
+# Health check - POST
+curl -X POST http://localhost:8080/healthcheck
 
-# Sample data
-curl http://localhost:8080/data
+# Service A - GET
+curl http://localhost:8080/servicea
 
-# User list
-curl http://localhost:8080/users
+# Service A - POST
+curl -X POST http://localhost:8080/servicea
 
-# API status
-curl http://localhost:8080/api/status
+# Service B - GET
+curl http://localhost:8080/serviceb
 
-# Error simulation
-curl http://localhost:8080/error
+# Service B - POST with JSON body
+curl -X POST http://localhost:8080/serviceb \
+  -H "Content-Type: application/json" \
+  -d '{"action":"test"}'
+
+# Service C - GET
+curl http://localhost:8080/servicec
+
+# Service C - POST
+curl -X POST http://localhost:8080/servicec
 ```
 
-Or open in your browser:
-- http://localhost:8080/health
-- http://localhost:8080/users
+Or open in your browser (for GET requests):
+- http://localhost:8080/healthcheck
+- http://localhost:8080/servicea
+- http://localhost:8080/serviceb
+- http://localhost:8080/servicec
 
 ## ⚙️ Configuration
 
@@ -124,16 +134,14 @@ The server reads all endpoint configurations from `config.json`:
 
 ### Default Endpoints
 
-The default `config.json` includes these endpoints:
+The default `config.json` includes these endpoints (all support GET and POST):
 
-| Method | Path | Status | Description |
-|--------|------|--------|-------------|
-| GET | `/health` | 200 | Health check endpoint |
-| GET | `/hello` | 200 | Hello world message |
-| GET | `/data` | 200 | Sample data array |
-| GET | `/users` | 200 | Sample user list |
-| GET | `/api/status` | 200 | API status information |
-| GET | `/error` | 500 | Simulated error response |
+| Methods | Path | Status | Description |
+|---------|------|--------|-------------|
+| GET, POST | `/healthcheck` | 200 | Health check endpoint |
+| GET, POST | `/servicea` | 200 | Service A endpoint |
+| GET, POST | `/serviceb` | 200 | Service B endpoint |
+| GET, POST | `/servicec` | 200 | Service C endpoint |
 
 ### Adding Custom Endpoints
 
@@ -141,6 +149,7 @@ You can easily add your own endpoints by editing `config.json`:
 
 **Step 1:** Open `config.json` and add a new endpoint to the `endpoints` array:
 
+**Single method:**
 ```json
 {
   "path": "/my-api",
@@ -151,6 +160,21 @@ You can easily add your own endpoints by editing `config.json`:
       "message": "My custom API",
       "data": [1, 2, 3],
       "custom_field": "any value"
+    }
+  }
+}
+```
+
+**Multiple methods:**
+```json
+{
+  "path": "/submit",
+  "methods": ["POST", "PUT"],
+  "response": {
+    "status": 201,
+    "body": {
+      "message": "Resource created",
+      "id": 123
     }
   }
 }
@@ -172,10 +196,19 @@ docker restart <container-id>
 **Step 3:** Test your new endpoint:
 
 ```bash
+# Test GET request
 curl http://localhost:8080/my-api
+
+# Test POST request
+curl -X POST http://localhost:8080/submit
+
+# Test with JSON body
+curl -X POST http://localhost:8080/submit \
+  -H "Content-Type: application/json" \
+  -d '{"name":"test"}'
 ```
 
-**Note:** Responses will contain exactly what you define in the config - no additional fields are added.
+**Note:** Responses will contain exactly what you define in the config - no additional fields are added. The server ignores request bodies and always returns the configured response.
 
 ### Configuration Examples
 
@@ -239,8 +272,32 @@ You can use any HTTP status code in your configuration:
 
 ### Supported HTTP Methods
 
-Currently supported:
+You can configure endpoints to accept one or multiple HTTP methods:
 - **GET** - Retrieve data
+- **POST** - Create/submit data
+- **PUT** - Update data
+- **DELETE** - Delete data
+- **PATCH** - Partial update
+
+#### Single Method Example:
+```json
+{
+  "path": "/users",
+  "method": "GET",
+  "response": { "status": 200, "body": {"users": []} }
+}
+```
+
+#### Multiple Methods Example:
+```json
+{
+  "path": "/data",
+  "methods": ["GET", "POST"],
+  "response": { "status": 200, "body": {"success": true} }
+}
+```
+
+Both `GET /data` and `POST /data` will return the same configured response
 
 ## 🔧 Environment Variables
 
@@ -284,8 +341,7 @@ The config file is mounted as a volume, so changes are reflected instantly after
 
 ## 📂 Files Included
 
-- **`config.json`** - Default endpoint configuration (6 endpoints)
-- **`config.example.json`** - Example with more advanced configurations
+- **`config.json`** - Default endpoint configuration (4 endpoints)
 - **`openapi.yaml`** - OpenAPI 3.0 specification defining all endpoints
 - **`QUICKSTART.md`** - Quick reference guide
 
@@ -298,7 +354,6 @@ The config file is mounted as a volume, so changes are reflected instantly after
 ├── main.go                 # Main application code (Go server)
 ├── go.mod                  # Go module dependencies
 ├── config.json             # Default endpoint configuration ⚙️
-├── config.example.json     # Example configurations
 ├── openapi.yaml            # OpenAPI 3.0 specification 📋
 ├── Dockerfile              # Docker image definition 🐳
 ├── docker-compose.yml      # Docker Compose setup 🐳
@@ -383,13 +438,15 @@ You can use tools like:
 - **Insomnia** - REST client with OpenAPI support
 - **curl** - Command-line testing (examples in README)
 
-## �📝 Configuration Examples
+##  Current Endpoints
 
-See `config.example.json` for more configuration examples including:
-- Product catalog endpoints
-- Weather API simulation
-- Authentication error responses (401, 403)
-- Various HTTP status codes
+The server includes 4 configurable endpoints:
+- `/healthcheck` - Health check endpoint
+- `/servicea` - Service A simulation
+- `/serviceb` - Service B simulation  
+- `/servicec` - Service C simulation
+
+All endpoints support both GET and POST methods and return the configured JSON responses.
 
 ## 🤝 Contributing
 
@@ -422,9 +479,10 @@ docker stop <container-id>                  # Stop container
 
 ### Testing Endpoints
 ```bash
-curl http://localhost:8080/health
-curl http://localhost:8080/hello
-curl http://localhost:8080/users
+curl http://localhost:8080/healthcheck
+curl http://localhost:8080/servicea
+curl http://localhost:8080/serviceb
+curl http://localhost:8080/servicec
 ```
 
 ### Local Development (Go required)

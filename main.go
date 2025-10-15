@@ -23,6 +23,7 @@ type EndpointResponse struct {
 type Endpoint struct {
 	Path     string           `json:"path"`
 	Method   string           `json:"method"`
+	Methods  []string         `json:"methods,omitempty"` // Support multiple methods
 	Response EndpointResponse `json:"response"`
 }
 
@@ -55,8 +56,25 @@ func loadConfig(filename string) error {
 // Create a handler for configured endpoints
 func createConfiguredHandler(endpoint Endpoint) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Check if method matches
-		if r.Method != endpoint.Method {
+		// Build list of allowed methods
+		allowedMethods := []string{}
+		if endpoint.Method != "" {
+			allowedMethods = append(allowedMethods, endpoint.Method)
+		}
+		if len(endpoint.Methods) > 0 {
+			allowedMethods = append(allowedMethods, endpoint.Methods...)
+		}
+		
+		// Check if method matches any allowed method
+		methodAllowed := false
+		for _, method := range allowedMethods {
+			if r.Method == method {
+				methodAllowed = true
+				break
+			}
+		}
+		
+		if !methodAllowed {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			json.NewEncoder(w).Encode(ErrorResponse{Error: "Method not allowed"})
@@ -116,7 +134,23 @@ func main() {
 	for _, endpoint := range config.Endpoints {
 		handler := createConfiguredHandler(endpoint)
 		http.HandleFunc(endpoint.Path, loggingMiddleware(handler))
-		log.Printf("  %s %s -> Status %d", endpoint.Method, endpoint.Path, endpoint.Response.Status)
+		
+		// Log all allowed methods
+		methods := []string{}
+		if endpoint.Method != "" {
+			methods = append(methods, endpoint.Method)
+		}
+		if len(endpoint.Methods) > 0 {
+			methods = append(methods, endpoint.Methods...)
+		}
+		methodsStr := methods[0]
+		if len(methods) > 1 {
+			for i := 1; i < len(methods); i++ {
+				methodsStr += ", " + methods[i]
+			}
+		}
+		
+		log.Printf("  %s %s -> Status %d", methodsStr, endpoint.Path, endpoint.Response.Status)
 	}
 
 	addr := ":" + port

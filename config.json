@@ -4,80 +4,42 @@
   },
   "endpoints": [
     {
-      "path": "/health",
-      "method": "GET",
+      "path": "/healthcheck",
+      "methods": ["GET", "POST"],
       "response": {
         "status": 200,
         "body": {
-          "message": "Service is healthy",
-          "status": "ok"
+          "status": true
         }
       }
     },
     {
-      "path": "/hello",
-      "method": "GET",
+      "path": "/servicea",
+      "methods": ["GET", "POST"],
       "response": {
         "status": 200,
         "body": {
-          "message": "Hello from configurable Go REST API!",
-          "status": "success"
+          "service": "servicea"
         }
       }
     },
     {
-      "path": "/data",
-      "method": "GET",
+      "path": "/serviceb",
+      "methods": ["GET", "POST"],
       "response": {
         "status": 200,
         "body": {
-          "items": ["item1", "item2", "item3"],
-          "count": 3,
-          "description": "Sample data from configuration"
+          "service": "serviceb"
         }
       }
     },
     {
-      "path": "/users",
-      "method": "GET",
+      "path": "/servicec",
+      "methods": ["GET", "POST"],
       "response": {
         "status": 200,
         "body": {
-          "users": [
-            {
-              "id": 1,
-              "name": "John Doe",
-              "email": "john@example.com"
-            },
-            {
-              "id": 2,
-              "name": "Jane Smith",
-              "email": "jane@example.com"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "/api/status",
-      "method": "GET",
-      "response": {
-        "status": 200,
-        "body": {
-          "api_version": "1.0.0",
-          "environment": "development",
-          "uptime": "configured endpoint"
-        }
-      }
-    },
-    {
-      "path": "/error",
-      "method": "GET",
-      "response": {
-        "status": 500,
-        "body": {
-          "error": "This is a simulated error",
-          "code": "DEMO_ERROR"
+          "service": "servicec"
         }
       }
     }
