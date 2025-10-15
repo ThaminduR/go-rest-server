@@ -1,0 +1,12 @@
+schemaVersion: "1.2"
+endpoints:
+    - name: go-rest-server-endpoint-5c6
+      displayName: Go Rest Server Endpoint
+      service:
+        basePath: /
+        port: 8080
+      type: REST
+      networkVisibilities:
+        - Project
+        - Public
+      schemaFilePath: openapi.yaml
