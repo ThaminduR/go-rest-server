@@ -43,11 +43,10 @@ paths:
                 type: object
                 properties:
                   status:
-                    type: string
-                    example: "healthy"
-                  service:
-                    type: string
-                    example: "go-rest-server"
+                    type: boolean
+                    example: true
+              example:
+                status: true
     post:
       tags:
         - Health
@@ -70,18 +69,17 @@ paths:
                 type: object
                 properties:
                   status:
-                    type: string
-                    example: "healthy"
-                  service:
-                    type: string
-                    example: "go-rest-server"
+                    type: boolean
+                    example: true
+              example:
+                status: true
 
   /servicea:
     get:
       tags:
         - Services
       summary: Service A endpoint
-      description: Returns Service A status and information
+      description: Returns Service A information
       operationId: getServiceA
       responses:
         '200':
@@ -94,17 +92,13 @@ paths:
                   service:
                     type: string
                     example: "servicea"
-                  status:
-                    type: string
-                    example: "running"
-                  version:
-                    type: string
-                    example: "1.0.0"
+              example:
+                service: "servicea"
     post:
       tags:
         - Services
       summary: Service A endpoint (POST)
-      description: Returns Service A status and information (accepts POST requests)
+      description: Returns Service A information (accepts POST requests)
       operationId: postServiceA
       requestBody:
         description: Optional request body (ignored by server)
@@ -124,19 +118,15 @@ paths:
                   service:
                     type: string
                     example: "servicea"
-                  status:
-                    type: string
-                    example: "running"
-                  version:
-                    type: string
-                    example: "1.0.0"
+              example:
+                service: "servicea"
 
   /serviceb:
     get:
       tags:
         - Services
       summary: Service B endpoint
-      description: Returns Service B status and information
+      description: Returns Service B information
       operationId: getServiceB
       responses:
         '200':
@@ -149,17 +139,13 @@ paths:
                   service:
                     type: string
                     example: "serviceb"
-                  status:
-                    type: string
-                    example: "running"
-                  version:
-                    type: string
-                    example: "1.0.0"
+              example:
+                service: "serviceb"
     post:
       tags:
         - Services
       summary: Service B endpoint (POST)
-      description: Returns Service B status and information (accepts POST requests)
+      description: Returns Service B information (accepts POST requests)
       operationId: postServiceB
       requestBody:
         description: Optional request body (ignored by server)
@@ -179,19 +165,15 @@ paths:
                   service:
                     type: string
                     example: "serviceb"
-                  status:
-                    type: string
-                    example: "running"
-                  version:
-                    type: string
-                    example: "1.0.0"
+              example:
+                service: "serviceb"
 
   /servicec:
     get:
       tags:
         - Services
       summary: Service C endpoint
-      description: Returns Service C status and information
+      description: Returns Service C information
       operationId: getServiceC
       responses:
         '200':
@@ -204,17 +186,13 @@ paths:
                   service:
                     type: string
                     example: "servicec"
-                  status:
-                    type: string
-                    example: "running"
-                  version:
-                    type: string
-                    example: "1.0.0"
+              example:
+                service: "servicec"
     post:
       tags:
         - Services
       summary: Service C endpoint (POST)
-      description: Returns Service C status and information (accepts POST requests)
+      description: Returns Service C information (accepts POST requests)
       operationId: postServiceC
       requestBody:
         description: Optional request body (ignored by server)
@@ -234,12 +212,8 @@ paths:
                   service:
                     type: string
                     example: "servicec"
-                  status:
-                    type: string
-                    example: "running"
-                  version:
-                    type: string
-                    example: "1.0.0"
+              example:
+                service: "servicec"
 
 components:
   schemas:
